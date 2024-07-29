@@ -20,6 +20,7 @@
             align-items: center;
             background: linear-gradient(135deg, #72EDF2 10%, #5151E5 100%);
             color: #fff;
+            overflow: hidden;
         }
 
         #loader {
@@ -36,17 +37,41 @@
         }
 
         .loader {
-            border: 10px solid #f3f3f3;
-            border-top: 10px solid #3498db;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .loader span {
+            display: block;
+            width: 1rem;
+            height: 1rem;
+            margin: 0.5rem;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0;
+            animation: fade 1s infinite;
+        }
+
+        .loader span:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .loader span:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .loader span:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        @keyframes fade {
+            0%, 100% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
         }
 
         #content {
@@ -98,17 +123,33 @@
 </head>
 <body>
     <div id="loader">
-        <div class="loader"></div>
+        <div class="loader">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     </div>
     <div id="content">
-        <h1>Under Progress</h1>
+        <h1 id="greeting">Hello Dear, Great to see you here!</h1>
         <p>We are working hard to give you a better experience!</p>
         <p class="quote">"The best way to predict the future is to create it." - Peter Drucker</p>
         <div class="coming-soon">Coming Soon...</div>
         <button onclick="location.href='#'">Learn More</button>
     </div>
     <script>
+        // Function to get user name
+        function getUserName() {
+            let name = prompt("Please enter your name:");
+            if (!name) {
+                name = "Guest";
+            }
+            return name;
+        }
+
+        // Show loader and then main content
         window.onload = function() {
+            const userName = getUserName();
+            document.getElementById('greeting').innerText = `Hello Dear ${userName}, Great to see you here!`;
             setTimeout(function() {
                 document.getElementById('loader').style.display = 'none';
                 document.getElementById('content').style.display = 'block';
@@ -116,4 +157,4 @@
         };
     </script>
 </body>
-</html>
+        </html>
