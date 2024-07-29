@@ -25,6 +25,7 @@
 
         #loader {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             position: fixed;
@@ -42,41 +43,36 @@
             justify-content: center;
         }
 
-        .loader span {
-            display: block;
-            width: 1rem;
-            height: 1rem;
-            margin: 0.5rem;
+        .loader div {
+            width: 1.5rem;
+            height: 1.5rem;
+            margin: 0.3rem;
             background: #fff;
             border-radius: 50%;
-            opacity: 0;
-            animation: fade 1s infinite;
+            animation: bounce 0.6s infinite alternate;
         }
 
-        .loader span:nth-child(1) {
-            animation-delay: 0s;
-        }
-
-        .loader span:nth-child(2) {
-            animation-delay: 0.1s;
-        }
-
-        .loader span:nth-child(3) {
+        .loader div:nth-child(2) {
             animation-delay: 0.2s;
         }
 
-        @keyframes fade {
-            0%, 100% {
-                opacity: 0;
-            }
-            50% {
-                opacity: 1;
+        .loader div:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+            to {
+                transform: translateY(-1rem);
+                opacity: 0.6;
             }
         }
 
         #content {
             display: none;
             text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
         }
 
         h1 {
@@ -92,10 +88,11 @@
         .quote {
             font-size: 1.2rem;
             font-style: italic;
+            margin-bottom: 1.5rem;
         }
 
         .coming-soon {
-            font-size: 1.8rem;
+            font-size: 2rem;
             margin-top: 1.5rem;
             animation: blink 1.5s infinite;
         }
@@ -103,6 +100,10 @@
         @keyframes blink {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
+        }
+
+        .button-container {
+            margin-top: 2rem;
         }
 
         button {
@@ -114,47 +115,57 @@
             color: white;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            margin: 0.5rem;
         }
 
         button:hover {
             background-color: #2980b9;
+        }
+
+        .notify-button:focus {
+            outline: none;
         }
     </style>
 </head>
 <body>
     <div id="loader">
         <div class="loader">
-            <span></span>
-            <span></span>
-            <span></span>
+            <div></div>
+            <div></div>
+            <div></div>
         </div>
+        <p>Loading for your best future...</p>
     </div>
     <div id="content">
         <h1 id="greeting">Hello Dear, Great to see you here!</h1>
         <p>We are working hard to give you a better experience!</p>
-        <p class="quote">"The best way to predict the future is to create it." - Peter Druckr</p>
+        <p class="quote">"The best way to predict the future is to create it." - Peter Drucker</p>
         <div class="coming-soon">Coming Soon...</div>
-        <button onclick="location.href='#'">Learn More</button>
+        <div class="button-container">
+            <button onclick="notifyUser()">Notify Me</button>
+        </div>
     </div>
     <script>
-        // Function to get user name
-        function getUserName() {
-            let name = prompt("Please enter your name:");
-            if (!name) {
-                name = "Guest";
-            }
-            return name;
+        // Function to get query parameter
+        function getQueryParam(param) {
+            let urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
         }
 
         // Show loader and then main content
         window.onload = function() {
-            const userName = getUserName();
+            const userName = getQueryParam('username') || 'Guest';
             document.getElementById('greeting').innerText = `Hello Dear ${userName}, Great to see you here!`;
             setTimeout(function() {
                 document.getElementById('loader').style.display = 'none';
                 document.getElementById('content').style.display = 'block';
             }, 3000); // Adjust the timeout value as needed
         };
+
+        // Function to handle Notify Me button click
+        function notifyUser() {
+            alert('Thanks for your interest! We will notify you.');
+        }
     </script>
 </body>
-        </html>
+</html>
