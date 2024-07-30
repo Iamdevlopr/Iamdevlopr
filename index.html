@@ -16,6 +16,7 @@
         }
         .container {
             text-align: center;
+            display: none; /* Hide main content initially */
         }
         .loader {
             margin: 0 auto 20px;
@@ -38,6 +39,7 @@
         }
         .loader div:nth-child(2) {
             animation-delay: -0.45s;
+            border-color: #e74c3c transparent transparent transparent;
         }
         @keyframes loader-animation {
             0% {
@@ -63,16 +65,16 @@
         .notify-message {
             margin-top: 20px;
             font-size: 16px;
-            color: #666;
+            color: green;
         }
     </style>
 </head>
 <body>
+    <div class="loader">
+        <div></div>
+        <div></div>
+    </div>
     <div class="container">
-        <div class="loader">
-            <div></div>
-            <div></div>
-        </div>
         <h1 class="static-text">We are working hard</h1>
         <h2 class="typewrite" data-period="2000" data-type='[ "For your better experience.", "For your benefits.", "Stay tuned for updates.", "Making things better for you." ]'>
             <span class="wrap"></span>
@@ -82,6 +84,21 @@
     </div>
 
     <script>
+        // Loader visibility control based on window load
+        window.onload = function() {
+            document.querySelector('.loader').style.display = 'none';
+            document.querySelector('.container').style.display = 'block';
+            // Initialize typing animation
+            var elements = document.getElementsByClassName('typewrite');
+            for (var i = 0; i < elements.length; i++) {
+                var toRotate = elements[i].getAttribute('data-type');
+                var period = elements[i].getAttribute('data-period');
+                if (toRotate) {
+                    new TxtType(elements[i], JSON.parse(toRotate), period);
+                }
+            }
+        };
+
         var TxtType = function(el, toRotate, period) {
             this.toRotate = toRotate;
             this.el = el;
@@ -121,17 +138,6 @@
             setTimeout(function() {
                 that.tick();
             }, delta);
-        };
-
-        window.onload = function() {
-            var elements = document.getElementsByClassName('typewrite');
-            for (var i = 0; i < elements.length; i++) {
-                var toRotate = elements[i].getAttribute('data-type');
-                var period = elements[i].getAttribute('data-period');
-                if (toRotate) {
-                    new TxtType(elements[i], JSON.parse(toRotate), period);
-                }
-            }
         };
 
         function notifyUser() {
