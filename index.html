@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,19 +13,26 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #f0f0f0;
+            background-color: #2c3e50;
+            color: #ecf0f1;
         }
         .container {
             text-align: center;
             display: none; /* Hide main content initially */
         }
         .loader {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .loader .animation {
             margin: 0 auto 20px;
             width: 100px;
             height: 100px;
             position: relative;
         }
-        .loader div {
+        .loader .animation div {
             box-sizing: border-box;
             display: block;
             position: absolute;
@@ -34,10 +42,10 @@
             border-radius: 50%;
             animation: loader-animation 1.2s infinite;
         }
-        .loader div:nth-child(1) {
+        .loader .animation div:nth-child(1) {
             border-color: #3498db transparent transparent transparent;
         }
-        .loader div:nth-child(2) {
+        .loader .animation div:nth-child(2) {
             animation-delay: -0.45s;
             border-color: #e74c3c transparent transparent transparent;
         }
@@ -50,7 +58,8 @@
             }
         }
         .typewrite span.wrap {
-            border-right: 0.08em solid #666;
+            border-right: 0.08em solid #ecf0f1;
+            color: #e74c3c;
         }
         .notify-button {
             background-color: #3498db;
@@ -67,14 +76,22 @@
             font-size: 16px;
             color: green;
         }
+        .background {
+            background-color: #34495e;
+            padding: 20px;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="loader">
-        <div></div>
-        <div></div>
+        <div class="animation">
+            <div></div>
+            <div></div>
+        </div>
+        <p class="loading-text">Loading for your best future...</p>
     </div>
-    <div class="container">
+    <div class="container background">
         <h1 class="static-text">We are working hard</h1>
         <h2 class="typewrite" data-period="2000" data-type='[ "For your better experience.", "For your benefits.", "Stay tuned for updates.", "Making things better for you." ]'>
             <span class="wrap"></span>
