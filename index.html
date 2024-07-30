@@ -3,189 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coming Soon</title>
+    <title>Under Progress</title>
     <style>
-        /* Basic Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body, html {
             height: 100%;
-            font-family: 'Arial', sans-serif;
+            margin: 0;
+            font-family: Arial, sans-serif;
             display: flex;
-            justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-            color: #333;
-            overflow: hidden;
+            justify-content: center;
+            background-color: #f0f0f0;
         }
-
-        #loader {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            left: 0;
+        .container {
+            text-align: center;
+        }
+        .loader {
+            margin: 0 auto 20px;
+            width: 100px;
+            height: 100px;
+            position: relative;
+        }
+        .loader div {
+            box-sizing: border-box;
+            display: block;
+            position: absolute;
             width: 100%;
             height: 100%;
-            background-color: #151515;
-            z-index: 9999;
-            color: white;
-            text-align: center;
-        }
-
-        .loader {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .loader div {
-            width: 1.5rem;
-            height: 1.5rem;
-            margin: 0.3rem;
-            background: #fff;
+            border: 8px solid #3498db;
             border-radius: 50%;
-            animation: bounce 0.6s infinite alternate;
+            animation: loader-animation 1.2s infinite;
         }
-
+        .loader div:nth-child(1) {
+            border-color: #3498db transparent transparent transparent;
+        }
         .loader div:nth-child(2) {
-            animation-delay: 0.2s;
+            animation-delay: -0.45s;
         }
-
-        .loader div:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes bounce {
-            to {
-                transform: translateY(-1.5rem);
-                opacity: 0.7;
+        @keyframes loader-animation {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
             }
         }
-
-        .loading-text {
-            margin-top: 1rem;
-            font-size: 1.5rem;
-            animation: fadeIn 1.5s infinite alternate;
+        .typewrite span.wrap {
+            border-right: 0.08em solid #666;
         }
-
-        @keyframes fadeIn {
-            to {
-                opacity: 0.5;
-            }
-        }
-
-        #content {
-            display: none;
-            text-align: center;
-            padding: 2rem;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: #333;
-        }
-
-        p {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-        }
-
-        .quote {
-            font-size: 1.2rem;
-            font-style: italic;
-            margin-bottom: 1.5rem;
-            color: #555;
-        }
-
-        .coming-soon {
-            font-size: 2rem;
-            margin-top: 1.5rem;
-            color: #e74c3c;
-        }
-
-        .button-container {
-            margin-top: 2rem;
-        }
-
-        button {
-            padding: 0.75rem 2rem;
-            font-size: 1rem;
+        .notify-button {
             background-color: #3498db;
-            border: none;
-            border-radius: 25px;
             color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin: 0.5rem;
+            border-radius: 5px;
+            margin-top: 20px;
         }
-
-        button:hover {
-            background-color: #2980b9;
-        }
-
-        .notify-button:focus {
-            outline: none;
-        }
-
         .notify-message {
-            display: none;
-            margin-top: 1rem;
-            font-size: 1rem;
-            color: #27ae60;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #666;
         }
     </style>
 </head>
 <body>
-    <div id="loader">
+    <div class="container">
         <div class="loader">
             <div></div>
             <div></div>
-            <div></div>
         </div>
-        <div class="loading-text">Loading for your best future...</div>
+        <h1 class="static-text">We are working hard</h1>
+        <h2 class="typewrite" data-period="2000" data-type='[ "For your better experience.", "For your benefits.", "Stay tuned for updates.", "Making things better for you." ]'>
+            <span class="wrap"></span>
+        </h2>
+        <button class="notify-button" onclick="notifyUser()">Notify Me</button>
+        <div class="notify-message" id="notifyMessage"></div>
     </div>
-    <div id="content">
-        <h1 id="greeting">Hello Dear, Great to see you here!</h1>
-        <p>We are working hard to give you a better experience!</p>
-        <p class="quote">"The best way to predict the future is to create it." - Peter Drucker</p>
-        <div class="coming-soon">Coming Soon...</div>
-        <div class="button-container">
-            <button onclick="notifyUser()" class="notify-button">Notify Me</button>
-            <div class="notify-message">Thanks for your interest! We will notify you once our website is completed.</div>
-        </div>
-    </div>
-    <script>
-        // Function to get query parameter
-        function getQueryParam(param) {
-            let urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
-        }
 
-        // Show loader and then main content
-        window.onload = function() {
-            const userName = getQueryParam('username') || 'Guest';
-            document.getElementById('greeting').innerText = `Hello Dear ${userName}, Great to see you here!`;
-            setTimeout(function() {
-                document.getElementById('loader').style.display = 'none';
-                document.getElementById('content').style.display = 'block';
-            }, 3000); // Adjust the timeout value as needed
+    <script>
+        var TxtType = function(el, toRotate, period) {
+            this.toRotate = toRotate;
+            this.el = el;
+            this.loopNum = 0;
+            this.period = parseInt(period, 10) || 2000;
+            this.txt = '';
+            this.tick();
+            this.isDeleting = false;
         };
 
-        // Function to handle Notify Me button click
+        TxtType.prototype.tick = function() {
+            var i = this.loopNum % this.toRotate.length;
+            var fullTxt = this.toRotate[i];
+
+            if (this.isDeleting) {
+                this.txt = fullTxt.substring(0, this.txt.length - 1);
+            } else {
+                this.txt = fullTxt.substring(0, this.txt.length + 1);
+            }
+
+            this.el.innerHTML = '<span class="wrap">' + this.txt + '</span>';
+
+            var that = this;
+            var delta = 200 - Math.random() * 100;
+
+            if (this.isDeleting) { delta /= 2; }
+
+            if (!this.isDeleting && this.txt === fullTxt) {
+                delta = this.period;
+                this.isDeleting = true;
+            } else if (this.isDeleting && this.txt === '') {
+                this.isDeleting = false;
+                this.loopNum++;
+                delta = 500;
+            }
+
+            setTimeout(function() {
+                that.tick();
+            }, delta);
+        };
+
+        window.onload = function() {
+            var elements = document.getElementsByClassName('typewrite');
+            for (var i = 0; i < elements.length; i++) {
+                var toRotate = elements[i].getAttribute('data-type');
+                var period = elements[i].getAttribute('data-period');
+                if (toRotate) {
+                    new TxtType(elements[i], JSON.parse(toRotate), period);
+                }
+            }
+        };
+
         function notifyUser() {
-            const notifyMessage = document.querySelector('.notify-message');
-            notifyMessage.style.display = 'block';
+            document.getElementById('notifyMessage').innerHTML = "Thanks for your interest! We will notify you once our website is completed.";
         }
     </script>
 </body>
