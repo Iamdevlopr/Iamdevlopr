@@ -1,165 +1,306 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Under Progress</title>
+    <title>Chat with AI</title>
     <style>
-        body, html {
-            height: 100%;
-            margin: 0;
+        body {
             font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
             display: flex;
-            align-items: center;
             justify-content: center;
-            background-color: #2c3e50;
-            color: #ecf0f1;
+            align-items: center;
+            height: 100vh;
         }
-        .container {
-            text-align: center;
-            display: none; /* Hide main content initially */
-        }
-        .loader {
+
+        .chat-container {
+            width: 400px;
+            max-width: 100%;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
             display: flex;
-            align-items: center;
-            justify-content: center;
             flex-direction: column;
         }
-        .loader .animation {
-            margin: 0 auto 20px;
-            width: 100px;
-            height: 100px;
+
+        .caution-message {
+            background: #fff3cd;
+            color: #856404;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 1px solid #ffeeba;
+            display: none;
+            font-size: 14px;
             position: relative;
         }
-        .loader .animation div {
-            box-sizing: border-box;
-            display: block;
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border: 8px solid #3498db;
-            border-radius: 50%;
-            animation: loader-animation 1.2s infinite;
+
+        .chat-box {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            background: #f9f9f9;
+            border-bottom: 1px solid #ccc;
+            position: relative;
         }
-        .loader .animation div:nth-child(1) {
-            border-color: #3498db transparent transparent transparent;
+
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 20px;
+            max-width: 70%;
+            word-wrap: break-word;
+            display: flex;
+            align-items: center;
         }
-        .loader .animation div:nth-child(2) {
-            animation-delay: -0.45s;
-            border-color: #e74c3c transparent transparent transparent;
+
+        .user-message {
+            background: #d1e7dd;
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
         }
-        @keyframes loader-animation {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
+
+        .ai-message {
+            background: #f8d7da;
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
         }
-        .typewrite span.wrap {
-            border-right: 0.08em solid #ecf0f1;
-            color: #e74c3c;
+
+        .message .name {
+            font-weight: bold;
+            margin-right: 10px;
         }
-        .notify-button {
-            background-color: #3498db;
-            color: white;
+
+        #message-input-container {
+            display: flex;
+            align-items: center;
+            border-top: 1px solid #ccc;
+            background: #fff;
+        }
+
+        #message-input {
             border: none;
-            padding: 10px 20px;
+            padding: 10px;
             font-size: 16px;
+            flex: 1;
+            border-top-left-radius: 20px;
+            border-bottom-left-radius: 20px;
+        }
+
+        #send-button {
+            border: none;
+            padding: 10px;
+            background: #007bff;
+            color: #fff;
             cursor: pointer;
-            border-radius: 5px;
-            margin-top: 20px;
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+            margin-left: 5px;
         }
-        .notify-message {
-            margin-top: 20px;
+
+        #username-input {
+            padding: 10px;
             font-size: 16px;
-            color: green;
+            margin-bottom: 10px;
         }
-        .background {
-            background-color: #34495e;
-            padding: 20px;
-            border-radius: 10px;
+
+        #start-chat-button {
+            padding: 10px;
+            background: #28a745;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        #move-on-button {
+            padding: 10px;
+            background: #ffc107;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+            display: none;
+        }
+
+        #leave-chat-button {
+            padding: 10px;
+            background: #dc3545;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+            display: block;
+        }
+
+        .conversation-box {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
     </style>
 </head>
 <body>
-    <div class="loader">
-        <div class="animation">
-            <div></div>
-            <div></div>
+    <div id="start-chat-container" class="chat-container">
+        <input type="text" id="username-input" placeholder="Enter your name">
+        <button id="start-chat-button">Start Chat</button>
+    </div>
+    <div class="chat-container" id="chat-container" style="display:none;">
+        <div id="caution-message" class="caution-message"></div>
+        <div class="conversation-box">
+            <div class="chat-box" id="chat-box">
+                <!-- Messages will be appended here -->
+            </div>
+            <div id="message-input-container">
+                <input type="text" id="message-input" placeholder="Type your message...">
+                <button id="send-button">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/send.png" alt="Send">
+                </button>
+            </div>
+            <button id="leave-chat-button">Leave Chat</button>
+            <button id="move-on-button">Move On</button>
         </div>
-        <p class="loading-text">Loading for your best future...</p>
     </div>
-    <div class="container background">
-        <h1 class="static-text">We are working hard</h1>
-        <h2 class="typewrite" data-period="2000" data-type='[ "For your better experience.", "For your benefits.", "Stay tuned for updates.", "Making things better for you." ]'>
-            <span class="wrap"></span>
-        </h2>
-        <button class="notify-button" onclick="notifyUser()">Notify Me</button>
-        <div class="notify-message" id="notifyMessage"></div>
-    </div>
-
     <script>
-        // Loader visibility control based on window load
-        window.onload = function() {
-            document.querySelector('.loader').style.display = 'none';
-            document.querySelector('.container').style.display = 'block';
-            // Initialize typing animation
-            var elements = document.getElementsByClassName('typewrite');
-            for (var i = 0; i < elements.length; i++) {
-                var toRotate = elements[i].getAttribute('data-type');
-                var period = elements[i].getAttribute('data-period');
-                if (toRotate) {
-                    new TxtType(elements[i], JSON.parse(toRotate), period);
+        document.addEventListener('DOMContentLoaded', () => {
+            const startChatContainer = document.getElementById('start-chat-container');
+            const chatContainer = document.getElementById('chat-container');
+            const usernameInput = document.getElementById('username-input');
+            const startChatButton = document.getElementById('start-chat-button');
+            const chatBox = document.getElementById('chat-box');
+            const messageInput = document.getElementById('message-input');
+            const sendButton = document.getElementById('send-button');
+            const moveOnButton = document.getElementById('move-on-button');
+            const leaveChatButton = document.getElementById('leave-chat-button');
+            const cautionMessage = document.getElementById('caution-message');
+
+            const botNames = ['Sara12', 'Jessica51', 'Emily33', 'Linda24', 'Sophia77', 
+                              'Ayesha89', 'Fatima12', 'Mehwish45', 'Hina67', 'Nida90', 
+                              'Sana11', 'Rabia32', 'Zara21', 'Kiran53', 'Maria76'];
+            let currentBotName = '';
+            let userName = 'You';
+
+            function startNewChat() {
+                currentBotName = botNames[Math.floor(Math.random() * botNames.length)];
+                const botName = currentBotName.replace(/\d+$/, ''); // Remove number from bot name for display
+                addMessage('ai', `Hi, I'm ${botName}. How can I assist you today?`);
+                setBotDisconnection();
+                moveOnButton.style.display = 'none';
+                leaveChatButton.style.display = 'block';
+            }
+
+            startChatButton.addEventListener('click', () => {
+                const enteredName = usernameInput.value.trim();
+                if (enteredName) {
+                    userName = enteredName;
+                }
+                startChatContainer.style.display = 'none';
+                chatContainer.style.display = 'flex';
+                startNewChat();
+                startCautionAnimation();
+            });
+
+            function addMessage(sender, text) {
+                const messageElement = document.createElement('div');
+                messageElement.className = 'message ' + (sender === 'user' ? 'user-message' : 'ai-message');
+                const name = document.createElement('div');
+                name.className = 'name';
+                name.textContent = (sender === 'user' ? userName : currentBotName.replace(/\d+$/, ''));
+                messageElement.appendChild(name);
+                const textElement = document.createElement('div');
+                textElement.textContent = text;
+                messageElement.appendChild(textElement);
+                chatBox.appendChild(messageElement);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+
+            function handleSendMessage() {
+                const messageText = messageInput.value.trim();
+                if (messageText === '') return;
+
+                addMessage('user', messageText);
+                messageInput.value = '';
+
+                // Simulate AI response
+                setTimeout(() => {
+                    const aiResponse = generateAIResponse(messageText);
+                    addMessage('ai', aiResponse);
+                }, 1000);
+            }
+
+            function generateAIResponse(userMessage) {
+                const lowerCaseMessage = userMessage.toLowerCase();
+                if (lowerCaseMessage.includes('hi') || lowerCaseMessage.includes('hello')) {
+                    return 'Hi there! How\'s it going?';
+                } else if (lowerCaseMessage.includes('how are you')) {
+                    return 'I\'m good, thanks! How about you?';
+                } else if (lowerCaseMessage.includes('where are you from')) {
+                    return 'I\'m from a small town. What about you?';
+                } else if (lowerCaseMessage.includes('hobbies')) {
+                    return 'I love reading books and listening to music. What are your hobbies?';
+                } else if (lowerCaseMessage.includes('friend') || lowerCaseMessage.includes('friends')) {
+                    return 'I love making new friends! How about you?';
+                } else if (lowerCaseMessage.includes('about')) {
+                    return 'I\'m just a friendly chatter! What do you want to know about me?';
+                } else {
+                    return 'That\'s interesting. Tell me more!';
                 }
             }
-        };
 
-        var TxtType = function(el, toRotate, period) {
-            this.toRotate = toRotate;
-            this.el = el;
-            this.loopNum = 0;
-            this.period = parseInt(period, 10) || 2000;
-            this.txt = '';
-            this.tick();
-            this.isDeleting = false;
-        };
+            function startCautionAnimation() {
+                const messages = [
+                    'You are chatting with a completely anonymous person. Be careful while sharing  your sensitive information such as your contact details.',
+                    'Aap ek bilkul anonymous shakhs se baat kar rahe hain. Apne sensitive maloomat jaise ke contact details share karne se gurez karen.'
+                ];
+                let index = 0;
 
-        TxtType.prototype.tick = function() {
-            var i = this.loopNum % this.toRotate.length;
-            var fullTxt = this.toRotate[i];
+                function showCautionMessage() {
+                    cautionMessage.innerText = messages[index];
+                    index = (index + 1) % messages.length;
+                    setTimeout(showCautionMessage, 10000); // Change message every 10 seconds
+                }
 
-            if (this.isDeleting) {
-                this.txt = fullTxt.substring(0, this.txt.length - 1);
-            } else {
-                this.txt = fullTxt.substring(0, this.txt.length + 1);
+                showCautionMessage();
+                cautionMessage.style.display = 'block';
+                setTimeout(() => {
+                    cautionMessage.style.display = 'none';
+                }, 10000); // Hide message after 10 seconds
             }
 
-            this.el.innerHTML = '<span class="wrap">' + this.txt + '</span>';
-
-            var that = this;
-            var delta = 200 - Math.random() * 100;
-
-            if (this.isDeleting) { delta /= 2; }
-
-            if (!this.isDeleting && this.txt === fullTxt) {
-                delta = this.period;
-                this.isDeleting = true;
-            } else if (this.isDeleting && this.txt === '') {
-                this.isDeleting = false;
-                this.loopNum++;
-                delta = 500;
+            function setBotDisconnection() {
+                const disconnectTime = Math.floor(Math.random() * (20 * 60 * 1000 - 1 * 60 * 1000 + 1)) + 1 * 60 * 1000;
+                setTimeout(() => {
+                    addMessage('ai', `${currentBotName.replace(/\d+$/, '')} has left the chat. Wanna chat with another one?`);
+                    moveOnButton.style.display = 'block';
+                }, disconnectTime);
             }
 
-            setTimeout(function() {
-                that.tick();
-            }, delta);
-        };
+            function leaveChat() {
+                addMessage('ai', `You can chat with another person after 5 seconds.`);
+                setTimeout(() => {
+                    addMessage('ai', `Start new chat`);
+                    startNewChat();
+                }, 5000);
+            }
 
-        function notifyUser() {
-            document.getElementById('notifyMessage').innerHTML = "Thanks for your interest! We will notify you once our website is completed.";
-        }
+            sendButton.addEventListener('click', handleSendMessage);
+
+            messageInput.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter') {
+                    handleSendMessage();
+                }
+            });
+
+            moveOnButton.addEventListener('click', () => {
+                leaveChat();
+            });
+        });
     </script>
 </body>
 </html>
