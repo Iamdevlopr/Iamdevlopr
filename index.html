@@ -3,336 +3,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anonymous Chat</title>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>AllSciInfo - Under Construction</title>
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
+        /* General Styles */
+        body, html {
+            height: 100%;
             margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-        }
-
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 1rem;
-            text-align: center;
-        }
-
-        main {
-            flex: 1;
+            font-family: 'Arial', sans-serif;
             display: flex;
             flex-direction: column;
+            background-color: #121212; /* Dark theme background */
+            color: #f1c40f; /* Yellow color */
+        }
+        .container {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        /* Loader Styles */
+        .loader {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #121212; /* Dark theme background */
+            z-index: 9999;
+            display: flex;
             justify-content: center;
             align-items: center;
-            padding: 1rem;
-        }
-
-        #caution {
-            color: red;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-
-        #chat-window {
-            width: 80%;
-            max-width: 600px;
-            height: 60vh;
-            border: 1px solid #ccc;
-            overflow-y: auto;
-            padding: 1rem;
-            background-color: #fff;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            display: none;
-        }
-
-        .chat-input {
-            display: flex;
-            width: 80%;
-            max-width: 600px;
-            margin-top: 1rem;
-            display: none;
-        }
-
-        #message-input {
-            flex: 1;
-            padding: 0.5rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        #send-button, #leave-button {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 5px;
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-            margin-left: 0.5rem;
-        }
-
-        .message {
-            margin-bottom: 1rem;
-            display: flex;
             flex-direction: column;
-            align-items: flex-start;
+        }
+        .loader-icon {
+            font-size: 70px;
+            margin-bottom: 15px;
+            color: #f1c40f; /* Yellow icon */
+            animation: bounce 1s infinite;
+        }
+        .loader-text {
+            font-size: 18px;
+            color: #f1c40f;
+        }
+        .main-content {
+            opacity: 0;
+            transition: opacity 1s ease-in;
+        }
+        .show-content {
+            opacity: 1;
         }
 
-        .message.user {
-            align-items: flex-end;
+        /* Science Messages Card Styles */
+        .science-card {
+            margin-top: 20px;
+            background-color: rgba(18, 18, 18, 0.9);
+            border: 2px solid #f1c40f;
+            border-radius: 8px;
+            padding: 20px;
+            display: none; /* Hidden by default */
+        }
+        .science-card h3 {
+            margin: 0;
         }
 
-        .message .bubble {
-            padding: 0.5rem;
-            border-radius: 15px;
-            max-width: 70%;
-            word-wrap: break-word;
+        /* Under Construction Section */
+        #under-construction {
+            margin-top: 40px;
+        }
+        .under-construction-icon {
+            font-size: 100px;
+            color: #f1c40f; /* Yellow color */
+            animation: bounce 2s infinite;
         }
 
-        .message.bot .bubble {
-            background-color: #e0e0e0;
-            border: 1px solid #ccc;
+        /* Team Message */
+        .team-message {
+            margin-top: 20px;
+            font-size: 18px;
         }
 
-        .message.user .bubble {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        #timer {
-            display: none;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #4CAF50;
-            margin-top: 1rem;
-        }
-
-        #username-prompt {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 80%;
-            max-width: 400px;
-        }
-
-        #username-input {
-            padding: 0.5rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-        }
-
-        #start-button {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 5px;
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-        }
-
-        #leave-message {
-            display: none;
+        /* Footer */
+        footer {
+            background-color: #000; /* Dark theme footer */
+            color: #f1c40f;
+            padding: 10px 0;
             text-align: center;
+            margin-top: auto;
         }
 
-        .countdown {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #FF5722;
+        /* Navbar Styles */
+        .navbar {
+            background-color: #000; /* Dark theme */
+            padding: 10px;
+        }
+        .navbar-brand {
+            color: #f1c40f;
         }
 
-        #chat-with-another {
+        /* Popup Styles */
+        .popup {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #f1c40f;
+            padding: 15px;
+            border-radius: 8px;
+            z-index: 10000;
             display: none;
-            text-align: center;
         }
 
+        /* Animations */
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Anonymous Chat</h1>
-    </header>
-    <main>
-        <div id="caution">
-            <p>⚠️ You are talking with strangers. Be careful while sharing your personal details.</p>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">SciInfo</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact us </a>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div id="username-prompt">
-            <input type="text" id="username-input" placeholder="Enter your username">
-            <button id="start-button">Start Chat</button>
+    </nav>
+
+    <!-- Loader Section -->
+    <div class="loader" id="loader">
+        <div class="loader-icon" id="loader-icon">
+            <i class="fas fa-cog"></i>
         </div>
-        <div id="chat-window"></div>
-        <div class="chat-input">
-            <input type="text" id="message-input" placeholder="Type your message...">
-            <button id="send-button">Send</button>
-            <button id="leave-button">Leave Chat</button>
+        <div class="loader-text" id="loading-message">Preparing content for you...</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container main-content" id="main-content">
+        <!-- Under Construction Message -->
+        <div id="under-construction">
+            <h1 class="display-4 under-construction-icon"><i class="fas fa-tools"></i></h1>
+            <p class="lead">Our website is Under development...<strong>!</strong></p>
+            <p class="team-message">We are working hard to give you a better experience!<br>Developed by <strong>Hamza Malik</strong></p>
         </div>
-        <div id="timer"></div>
-        <div id="leave-message">
-            <p>You are leaving the chat. Please wait <span id="countdown" class="countdown">10</span> seconds to reconnect...</p>
+
+        <!-- Science Messages Card -->
+        <div class="science-card" id="science-card">
+            <h3 id="science-message">Loading science message...</h3>
         </div>
-        <div id="chat-with-another">
-            <p>Connecting you with another user...</p>
-        </div>
-    </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 AllSciInfo.com | All rights reserved.</p>
+    </footer>
+
+    <!-- Popup Message -->
+    <div id="popup" class="popup">This feature will be available soon.</div>
+
+    <!-- Scripts -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const chatWindow = document.getElementById('chat-window');
-            const messageInput = document.getElementById('message-input');
-            const sendButton = document.getElementById('send-button');
-            const leaveButton = document.getElementById('leave-button');
-            const timerDiv = document.getElementById('timer');
-            const leaveMessage = document.getElementById('leave-message');
-            const countdownSpan = document.getElementById('countdown');
-            const chatWithAnother = document.getElementById('chat-with-another');
-            const usernamePrompt = document.getElementById('username-prompt');
-            const usernameInput = document.getElementById('username-input');
-            const startButton = document.getElementById('start-button');
+        // Loader Functionality
+        const loader = document.getElementById('loader');
+        const mainContent = document.getElementById('main-content');
+        const scienceCard = document.getElementById('science-card');
+        const scienceMessage = document.getElementById('science-message');
+        const popup = document.getElementById('popup');
 
-            let username = '';
-            let botName = '';
-            let isMaleBot = false;
-            let countdownInterval;
+        // Loading messages and icons
+        const loadingData = [
+            { icon: 'fas fa-cog', message: "Preparing content for you..." },
+            { icon: 'fas fa-laptop-code', message: "We are coding away!" },
+            { icon: 'fas fa-globe', message: "Connecting to the network!" }
+        ];
 
-            const femaleNames = ['Ayesha', 'Fatima', 'Sara', 'Priya', 'Anjali', 'Emma', 'Olivia', 'Sophia'];
-            const maleNames = ['Ahmed', 'Ali', 'Raj', 'Arjun', 'John', 'James', 'Robert'];
+        let currentLoadingIndex = 0;
 
-            const greetings = [
-                "Hey there! 😊",
-                "Hi! How's it going?",
-                "Hello! What are you up to?",
-                "Hey! What's up?",
-                "Hi! Nice to meet you."
-            ];
+        // Change loading message and icon every 2 seconds
+        const loadingInterval = setInterval(() => {
+            const currentLoading = loadingData[currentLoadingIndex];
+            document.getElementById('loader-icon').innerHTML = `<i class="${currentLoading.icon}"></i>`;
+            document.getElementById('loading-message').textContent = currentLoading.message;
+            currentLoadingIndex++;
 
-            const flirtyTexts = [
-                "You have a way with words! 😉",
-                "If I could rearrange the alphabet, I’d put U and I together. 😏",
-                "Do you have a name, or can I call you mine? 😍",
-                "Are you a magician? Because whenever I look at you, everyone else disappears. 😌",
-                "Is it hot in here or is it just you? 🔥"
-            ];
-
-            const generalConversations = [
-                "That's fascinating! Tell me more.",
-                "Really? That sounds interesting!",
-                "I'd love to hear more about that.",
-                "Wow! How did that happen?",
-                "That sounds like fun!"
-            ];
-
-            function getRandomName(names) {
-                return names[Math.floor(Math.random() * names.length)];
+            // Stop after showing all loading messages
+            if (currentLoadingIndex === loadingData.length) {
+                clearInterval(loadingInterval);
             }
+        }, 2000); // Change every 2 seconds
 
-            function getRandomMessage(messages) {
-                return messages[Math.floor(Math.random() * messages.length)];
-            }
+        // Hide loader and show content after 8 seconds
+        setTimeout(() => {
+            loader.style.display = 'none';
+            mainContent.classList.add('show-content');
+            scienceCard.style.display = 'block'; // Show science card
+            showScienceMessage(); // Show the first message
+        }, 8000);
 
-            function connectToBot() {
-                if (Math.random() > 0.5) {
-                    botName = getRandomName(femaleNames);
-                    isMaleBot = false;
-                } else {
-                    botName = getRandomName(maleNames);
-                    isMaleBot = true;
-                }
+        // Science Messages
+        const customScienceMessages = "Did you know? The Earth's core is as hot as the surface of the Sun!,Fact: A teaspoon of a neutron star would weigh 6 billion tons!,Amazing: Light from the Sun takes about 8 minutes to reach Earth., Water can boil and freeze at the same time under specific conditions, called the 'triple point', A single human brain generates more electrical impulses in a day than all the telephones in the world, Honey never spoils — archaeologists have found pots of honey in ancient Egyptian tombs that are over 3,000 years old and still perfectly edible, An adult human body is made up of approximately 7 octillion atoms, The human eye can distinguish about 10 million different colors, There are more stars in the universe than grains of sand on all the Earth's beaches, A day on Venus is longer than a year on Venus, Bananas are radioactive because they contain potassium-40, a radioactive isotope, The Amazon rainforest produces 20% of the world's oxygen supply, The Eiffel Tower can be 15 cm taller during the summer due to the expansion of iron in the heat. ";
 
-                appendMessage(botName, getRandomMessage(greetings), 'bot');
-                if (isMaleBot) {
-                    appendMessage(botName, "Are you a girl or boy?", 'bot');
-                }
-            }
+        // Convert the string into an array of trimmed messages
+        const scienceMessages = customScienceMessages.split(',').map(msg => msg.trim());
 
-            function startChat() {
-                username = usernameInput.value.trim();
-                if (username) {
-                    usernamePrompt.style.display = 'none';
-                    chatWindow.style.display = 'block';
-                    document.querySelector('.chat-input').style.display = 'flex';
-                    connectToBot();
-                }
-            }
+        let currentMessageIndex = 0;
 
-            startButton.addEventListener('click', startChat);
+        function showScienceMessage() {
+            scienceMessage.textContent = scienceMessages[currentMessageIndex];
+            scienceMessage.style.animation = 'fadeIn 0.5s'; // Add fade-in animation
 
-            sendButton.addEventListener('click', () => {
-                const message = messageInput.value.trim();
-                if (message) {
-                    appendMessage('You', message, 'user');
-                    messageInput.value = '';
-                    simulateBotResponse(message);
-                }
+            currentMessageIndex = (currentMessageIndex + 1) % scienceMessages.length;
+setTimeout(() => {
+                showScienceMessage(); // Show next message after 15 seconds
+            }, 15000); // Change every 15 seconds
+        }
+
+        // Show pop-up message when a navbar link is clicked
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function (event) {
+                event.preventDefault();
+                showPopup();
             });
-
-            leaveButton.addEventListener('click', () => {
-                leaveChat();
-            });
-
-            function appendMessage(sender, message, type) {
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('message');
-                messageElement.classList.add(type);
-                messageElement.innerHTML = `<div class="bubble">${message}</div>`;
-                chatWindow.appendChild(messageElement);
-                chatWindow.scrollTop = chatWindow.scrollHeight;
-            }
-
-            function simulateBotResponse(userMessage) {
-                let botResponse = '';
-
-                if (isMaleBot && userMessage.toLowerCase().includes('boy')) {
-                    botResponse = 'This user is no longer available to chat with you.';
-                    appendMessage(botName, botResponse, 'bot');
-                    setTimeout(() => {
-                        leaveChat();
-                    }, 3000);
-                } else {
-                    if (isMaleBot) {
-                        botResponse = getRandomMessage(generalConversations);
-                    } else {
-                        botResponse = getRandomMessage(flirtyTexts);
-                    }
-                    appendMessage(botName, botResponse, 'bot');
-                }
-            }
-
-            function leaveChat() {
-                // Display the leaving chat message with countdown timer
-                chatWindow.style.display = 'none';
-                document.querySelector('.chat-input').style.display = 'none';
-                leaveMessage.style.display = 'block';
-
-                let countdown = 10;
-                countdownSpan.textContent = countdown;
-
-                // Countdown timer
-                countdownInterval = setInterval(() => {
-                    countdown--;
-                    countdownSpan.textContent = countdown;
-
-                    if (countdown <= 0) {
-                        clearInterval(countdownInterval);
-                        leaveMessage.style.display = 'none';
-                        chatWithAnother.style.display = 'block';
-
-                        // Simulate reconnecting to a new bot
-                        setTimeout(() => {
-                            chatWithAnother.style.display = 'none';
-                            chatWindow.innerHTML = '';
-                            document.querySelector('.chat-input').style.display = 'flex';
-                            connectToBot();
-                            chatWindow.style.display = 'block';
-                        }, 3000); // 3 seconds before reconnecting
-                    }
-                }, 1000); // 1 second intervals
-            }
         });
+
+        // Function to show pop-up for 3 seconds
+        function showPopup() {
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 3000); // Hide after 3 seconds
+        }
     </script>
+    
+    <!-- Bootstrap JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
